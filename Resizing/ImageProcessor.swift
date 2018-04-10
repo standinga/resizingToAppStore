@@ -13,12 +13,12 @@ class ImageProcessor {
     let sizes = [20, 29, 40, 60, 58, 76, 80, 87, 120, 152, 167, 180, 512]
     
     func resizeToAll(_ image: CGImage, formats: [Int], completionHandler: @escaping (_ image: CGImage, _ width: Int)->Void) {
-        
-        let dispatchQueue = DispatchQueue(label: "taskQueue")
-//
-        dispatchQueue.sync {
+
+        let dispatchQueue = DispatchQueue(label: "taskQueue", qos: .userInitiated, attributes: .concurrent)
+        dispatchQueue.async {
+            [weak self] in
             for s in formats {
-                guard let resized = self.resize(image, outputWidth: s) else {
+                guard let resized = self?.resize(image, outputWidth: s) else {
                     print("nil")
                     return
                 }
@@ -26,7 +26,6 @@ class ImageProcessor {
             }
         }
     }
-    
     
     func resize(_ image: CGImage, outputWidth: Int)-> CGImage? {
         

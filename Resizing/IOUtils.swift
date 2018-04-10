@@ -74,7 +74,7 @@ class IOUtils {
             print("can't get extension")
             return nil
         }
-        let newFname = "\(path)/\(fName)_\(size).\(extString)"
+        let newFname = "\(path)/\(fName)@\(size).\(extString)"
         let ext = extString == "jpg" ? FileExtension.jpg : .png
         return (name: newFname, ext: ext)
     }
