@@ -13,7 +13,7 @@ let args = CommandLine.arguments
 let numOfArguments = args.count
 
 guard numOfArguments > 1 else {
-    print("need to provide path")
+    print("need to provide path to input file")
     exit(1)
 }
 
