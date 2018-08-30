@@ -64,7 +64,11 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "/Users/michal/zoom_ic_play_iOS.png"
-            isEnabled = "NO">
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "zoomA"
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
       <EnvironmentVariables>

@@ -8,56 +8,51 @@
 
 import Foundation
 
-class IOUtils {
+struct IOUtils {
     
     enum FileExtension {
         case jpg, png
     }
     
     func openFile(path: String)->CGImage? {
+        print("will openFile path: \(path)")
         let url = URL.init(fileURLWithPath: path)
         guard url.isFileURL else {
-            print("not a file")
-            return nil
+            fatalError("not a file")
         }
         let options:Dictionary = [kCGImageSourceShouldCache: "true"]
         guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, options as CFDictionary) else {
-            print("can't create imageSource")
-            return nil
+            fatalError("can't create imageSource")
         }
         guard let image = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
-            print("can't open image")
-            return nil
+            fatalError("can't open image")
         }
         return image
     }
     
     func save(_ image: CGImage, path: String, size: Int) {
+        print("will save, path: \(path)")
         guard let (fName, ext) = createFileName(path: path, size: size) else {
-            print(#line)
-            return
+            fatalError("can't createFileName from path: \(path) extenssizeion: \(size)" )
         }
         let url = URL.init(fileURLWithPath: fName)
         let type = ext == .jpg ? kUTTypeJPEG : kUTTypePNG
         guard let destination = CGImageDestinationCreateWithURL(url as CFURL, type, 1, nil) else {
-            print(#line)
-            return
+            fatalError("can't create destination from url: \(url.absoluteString)")
         }
         CGImageDestinationAddImage(destination, image, nil)
         
         let finalized = CGImageDestinationFinalize(destination)
         
         if !finalized {
-            print(#line)
-            return
+            fatalError("can't CGImageDestinationFinalize destination: \(destination) ")
         }
     }
     
     func createFileName(path: String, size: Int)-> (name: String, ext: FileExtension)? {
         var splitPath = path.split(separator: "/")
         guard let nameWithExtension = splitPath.popLast() else {
-            print("can't get file name")
-            return nil
+            fatalError("can't get file name")
         }
         
         var path = ""
@@ -67,12 +62,10 @@ class IOUtils {
         }
         
         guard let fName = nameWithExtension.split(separator: ".").first else {
-            print("can't get fName")
-            return nil
+            fatalError("can't get fName")
         }
         guard let extString = nameWithExtension.split(separator: ".").last else {
-            print("can't get extension")
-            return nil
+            fatalError("can't get extension")
         }
         let newFname = "\(path)/\(fName)@\(size).\(extString)"
         let ext = extString == "jpg" ? FileExtension.jpg : .png
