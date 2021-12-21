@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ImageIO
 
 struct IOUtils {
     
